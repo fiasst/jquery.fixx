@@ -290,7 +290,7 @@
               top: topPos,
             });
 
-        if (options.leftPositioning) {
+        if (optionsObj.leftPositioning) {
           element.css({
             left: pos.left
           })
