@@ -136,7 +136,13 @@
           * CSS property to the fixed element. This gives you the option
           * to prevent it being set.
           */
-          leftPositioning: true
+          leftPositioning: true,
+
+          isFixedCallback: function(){},
+
+          isStaticCallback: function(){},
+
+          isFrozenCallback: function(){}
         },
 
         optionsObj = $.extend(true, defaults, options),
@@ -246,6 +252,9 @@
       if (isAcceptedBreakpoint && scrollTop > startPoint()) {
         element.removeClass(optionsObj.stateStaticClass).addClass(optionsObj.stateFixedClass);
 
+        // call the isFixed callback function.
+        optionsObj.isFixedCallback();
+
         /*
         * If user has scrolled past where we want the element to
         * freeze in position:
@@ -253,11 +262,14 @@
         if (scrollTop >= endPoint()) {
           // Add classname to freeze element.
           element.addClass(optionsObj.stateFreezeClass);
+
+          // call the isFrozen callback function.
+          optionsObj.isFrozenCallback();
         }
         else {
           /*
           * Back within fixed startPoint => endPoint range so un-freeze
-          * element be removing freeze classname.
+          * element by removing freeze classname.
           */
           element.removeClass(optionsObj.stateFreezeClass);
         }
@@ -265,6 +277,9 @@
       else {
         // Scroll up past startPoint so remove fixed/freeze classes.
         element.addClass(optionsObj.stateStaticClass).removeClass(optionsObj.stateFixedClass + ' ' + optionsObj.stateFreezeClass);
+
+        // call the isStatic callback function.
+        optionsObj.isStaticCallback();
       }
 
       if (element.hasClass(optionsObj.stateFixedClass)) {
